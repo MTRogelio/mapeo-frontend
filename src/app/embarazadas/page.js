@@ -355,7 +355,7 @@ const EmbarazadasPage = () => {
               />
               <label className="modal-label">Municipio:</label>
               {/* 🔹 ComboBox de Municipio */}
-              <select name="Municipio" className="input" required>
+              <select name="Municipio" className="modal-input" required>
                 <option value="">Seleccione un municipio</option>
                 {municipios.map((mun) => (
                   <option key={mun} value={mun}>
@@ -363,7 +363,7 @@ const EmbarazadasPage = () => {
                   </option>
                 ))}
               </select>
-              
+
               <label className="modal-label">Departamento:</label>
               <input
                 className="modal-input"
