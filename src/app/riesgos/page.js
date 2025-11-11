@@ -30,7 +30,7 @@ export default function RiesgosPage() {
 
   // Cargar embarazadas
   const cargarEmbarazadas = () => {
-    fetch("https://backend-demo-xowfm.ondigitalocean.app/embarazadas")
+    fetch("https://mapeo-backend.vercel.app/embarazadas")
       .then((res) => res.json())
       .then((data) => setEmbarazadas(data))
       .catch((err) => console.error("⚠ Error cargando embarazadas:", err));
@@ -48,7 +48,7 @@ export default function RiesgosPage() {
   const eliminar = async (id) => {
     if (!confirm("¿Seguro de eliminar este riesgo?")) return;
     const res = await fetch(
-      `https://backend-demo-xowfm.ondigitalocean.app/riesgos/${id}`,
+      `https://mapeo-backend.vercel.app/riesgos/${id}`,
       { method: "DELETE" }
     );
     if (res.ok) cargarRiesgos();
@@ -65,7 +65,7 @@ export default function RiesgosPage() {
     };
 
     const res = await fetch(
-      `https://backend-demo-xowfm.ondigitalocean.app/riesgos/${editando}`,
+      `https://mapeo-backend.vercel.app/riesgos/${editando}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -97,7 +97,7 @@ export default function RiesgosPage() {
           };
 
           const res = await fetch(
-            "https://backend-demo-xowfm.ondigitalocean.app/riesgos",
+            "https://mapeo-backend.vercel.appp/riesgos",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
