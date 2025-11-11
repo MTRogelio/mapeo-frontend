@@ -3,45 +3,31 @@ import { useEffect, useState } from "react";
 import "./EmbarazadasPage.css";
 
 export default function EmbarazadasPage() {
-  // ======== ESTADOS EMBARAZADAS ========
+  // ======== ESTADOS ========
   const [embarazadas, setEmbarazadas] = useState([]);
+  const [direcciones, setDirecciones] = useState([]);
+  const [embarazadasConDireccion, setEmbarazadasConDireccion] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [editandoEmbarazada, setEditandoEmbarazada] = useState(null);
-
-  // ======== ESTADOS DIRECCIONES ========
-  const [direcciones, setDirecciones] = useState([]);
   const [editandoDireccion, setEditandoDireccion] = useState(null);
-  const [embarazadasConDireccion, setEmbarazadasConDireccion] = useState([]);
 
-  // Estados para colapsar/expandir tablas
-  const [mostrarTablaCombinada, setMostrarTablaCombinada] = useState(false);
+  // ======== COLAPSAR TABLAS ========
+  const [mostrarTablaCombinada, setMostrarTablaCombinada] = useState(true);
   const [mostrarTablaEmbarazadas, setMostrarTablaEmbarazadas] = useState(false);
   const [mostrarTablaDirecciones, setMostrarTablaDirecciones] = useState(false);
 
-  // ======== CARGAR DATOS COMBINADOS ========
-  const cargarEmbarazadasConDireccion = () => {
-    fetch("https://mapeo-backend.vercel.app/embarazadas-direcciones")
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al obtener embarazadas con dirección");
-        return res.json();
-      })
-      .then((data) => setEmbarazadasConDireccion(data))
-      .catch((err) => console.error(err));
-  };
-
-  // Asegúrate de llamarla en el useEffect
+  // ======== FETCH ========
   useEffect(() => {
     cargarEmbarazadas();
     cargarDirecciones();
-    cargarEmbarazadasConDireccion(); // 👈 nueva llamada
+    cargarEmbarazadasConDireccion();
   }, []);
 
-  // ======== CARGAR DATOS ========
   const cargarEmbarazadas = () => {
     fetch("https://mapeo-backend.vercel.app/embarazadas")
       .then((res) => {
-        if (!res.ok) throw new Error("Error al obtener las embarazadas");
+        if (!res.ok) throw new Error("Error al obtener embarazadas");
         return res.json();
       })
       .then((data) => {
@@ -64,40 +50,40 @@ export default function EmbarazadasPage() {
       .catch((err) => console.error(err));
   };
 
-  useEffect(() => {
-    cargarEmbarazadas();
-    cargarDirecciones();
-  }, []);
+  const cargarEmbarazadasConDireccion = () => {
+    fetch("https://mapeo-backend.vercel.app/embarazadas-direcciones")
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al obtener embarazadas con dirección");
+        return res.json();
+      })
+      .then((data) => setEmbarazadasConDireccion(data))
+      .catch((err) => console.error(err));
+  };
 
   // ======== CRUD EMBARAZADAS ========
   const eliminarEmbarazada = async (id) => {
     if (!confirm("¿Seguro que deseas eliminar este registro?")) return;
-
-    // Buscar la embarazada para obtener su ID_Direccion
     const embarazada = embarazadas.find((e) => e.ID_Embarazada === id);
     const idDireccion = embarazada?.ID_Direccion;
 
-    // Eliminar la embarazada
     const res = await fetch(`https://mapeo-backend.vercel.app/embarazadas/${id}`, {
       method: "DELETE",
     });
 
     if (res.ok) {
-      // Si tenía dirección, eliminarla también
       if (idDireccion) {
         await fetch(`https://mapeo-backend.vercel.app/direcciones/${idDireccion}`, {
           method: "DELETE",
         });
       }
-
       alert("🗑️ Embarazada y dirección eliminadas correctamente");
       cargarEmbarazadas();
       cargarDirecciones();
+      cargarEmbarazadasConDireccion();
     } else {
       alert("⚠ Error al eliminar");
     }
   };
-
 
   const guardarEdicionEmbarazada = async (e) => {
     e.preventDefault();
@@ -121,6 +107,7 @@ export default function EmbarazadasPage() {
       alert("✏️ Registro actualizado");
       setEditandoEmbarazada(null);
       cargarEmbarazadas();
+      cargarEmbarazadasConDireccion();
     } else {
       alert("⚠ Error al editar");
     }
@@ -135,6 +122,7 @@ export default function EmbarazadasPage() {
     if (res.ok) {
       alert("🗑️ Dirección eliminada");
       cargarDirecciones();
+      cargarEmbarazadasConDireccion();
     } else {
       alert("⚠ Error al eliminar");
     }
@@ -165,136 +153,175 @@ export default function EmbarazadasPage() {
       alert("✏️ Dirección actualizada");
       setEditandoDireccion(null);
       cargarDirecciones();
+      cargarEmbarazadasConDireccion();
     } else {
       alert("⚠ Error al editar");
     }
   };
 
-  if (loading) return <p className="text-blue">Cargando datos...</p>;
-  if (error) return <p className="text-red">⚠ {error}</p>;
+  if (loading) return <p>Cargando datos...</p>;
+  if (error) return <p>⚠ {error}</p>;
 
   return (
-    
     <div className="container">
-      {/* =============================== */}
-      {/* TABLA COMBINADA EMBARAZADA + DIRECCIÓN */}
-      {/* =============================== */}
-      <h1 className="title">👩‍🍼 Embarazadas con Dirección</h1>
-      <table className="embarazada-table">
-        <thead className="embarazada-thead">
-          <tr className="embarazada-tr">
-            <th className="embarazada-th">ID Embarazada</th>
-            <th className="embarazada-th">Nombre</th>
-            <th className="embarazada-th">Edad</th>
-            <th className="embarazada-th">Teléfono</th>
-            <th className="embarazada-th">Calle</th>
-            <th className="embarazada-th">Ciudad</th>
-            <th className="embarazada-th">Municipio</th>
-            <th className="embarazada-th">Departamento</th>
-            <th className="embarazada-th">Zona</th>
-            <th className="embarazada-th">Avenida</th>
-            <th className="embarazada-th">Número Casa</th>
-          </tr>
-        </thead>
-        <tbody className="embarazada-tbody">
-          {embarazadasConDireccion.map((item) => (
-            <tr key={item.ID_Embarazada} className="embarazada-tr">
-              <td className="embarazada-td" data-label="ID">{item.ID_Embarazada}</td>
-              <td className="embarazada-td" data-label="Nombre">{item.Nombre}</td>
-              <td className="embarazada-td" data-label="Edad">{item.Edad}</td>
-              <td className="embarazada-td" data-label="Teléfono">{item.Telefono}</td>
-              <td className="embarazada-td" data-label="Calle">{item.Calle}</td>
-              <td className="embarazada-td" data-label="Ciudad">{item.Ciudad}</td>
-              <td className="embarazada-td" data-label="Municipio">{item.Municipio}</td>
-              <td className="embarazada-td" data-label="Departamento">{item.Departamento}</td>
-              <td className="embarazada-td" data-label="Zona">{item.Zona || "-"}</td>
-              <td className="embarazada-td" data-label="Avenida">{item.Avenida || "-"}</td>
-              <td className="embarazada-td" data-label="Número Casa">{item.NumeroCasa || "-"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+
+      {/* =============== */}
+      {/* TABLA COMBINADA */}
+      {/* =============== */}
+      <div className="table-section">
+        <h1 className="title">
+          👩‍🍼 Embarazadas con Dirección
+          <button
+            onClick={() => setMostrarTablaCombinada(!mostrarTablaCombinada)}
+            className="btn-editar"
+            style={{ marginLeft: "15px", fontSize: "14px" }}
+          >
+            {mostrarTablaCombinada ? "Ocultar" : "Mostrar"}
+          </button>
+        </h1>
+
+        {mostrarTablaCombinada && (
+          <table className="embarazada-table">
+            <thead className="embarazada-thead">
+              <tr className="embarazada-tr">
+                <th className="embarazada-th">ID Embarazada</th>
+                <th className="embarazada-th">Nombre</th>
+                <th className="embarazada-th">Edad</th>
+                <th className="embarazada-th">Teléfono</th>
+                <th className="embarazada-th">Calle</th>
+                <th className="embarazada-th">Ciudad</th>
+                <th className="embarazada-th">Municipio</th>
+                <th className="embarazada-th">Departamento</th>
+                <th className="embarazada-th">Zona</th>
+                <th className="embarazada-th">Avenida</th>
+                <th className="embarazada-th">Número Casa</th>
+              </tr>
+            </thead>
+            <tbody className="embarazada-tbody">
+              {embarazadasConDireccion.map((item) => (
+                <tr key={item.ID_Embarazada} className="embarazada-tr">
+                  <td className="embarazada-td" data-label="ID">{item.ID_Embarazada}</td>
+                  <td className="embarazada-td" data-label="Nombre">{item.Nombre}</td>
+                  <td className="embarazada-td" data-label="Edad">{item.Edad}</td>
+                  <td className="embarazada-td" data-label="Teléfono">{item.Telefono}</td>
+                  <td className="embarazada-td" data-label="Calle">{item.Calle}</td>
+                  <td className="embarazada-td" data-label="Ciudad">{item.Ciudad}</td>
+                  <td className="embarazada-td" data-label="Municipio">{item.Municipio}</td>
+                  <td className="embarazada-td" data-label="Departamento">{item.Departamento}</td>
+                  <td className="embarazada-td" data-label="Zona">{item.Zona || "-"}</td>
+                  <td className="embarazada-td" data-label="Avenida">{item.Avenida || "-"}</td>
+                  <td className="embarazada-td" data-label="Número Casa">{item.NumeroCasa || "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
 
       {/* ===================== */}
-      {/* TABLA DE EMBARAZADAS */}
+      {/* TABLA EMBARAZADAS */}
       {/* ===================== */}
-      <h1 className="title">Lista de Embarazadas</h1>
-      <table className="embarazada-table">
-        <thead className="embarazada-thead">
-          <tr className="embarazada-tr">
-            <th className="embarazada-th">ID</th>
-            <th className="embarazada-th">Nombre</th>
-            <th className="embarazada-th">Edad</th>
-            <th className="embarazada-th">Teléfono</th>
-            <th className="embarazada-th">ID Dirección</th>
-            <th className="embarazada-th acciones">Acciones</th>
-          </tr>
-        </thead>
-        <tbody className="embarazada-tbody">
-          {embarazadas.map((e) => (
-            <tr key={e.ID_Embarazada} className="embarazada-tr">
-              <td className="embarazada-td" data-label="ID">{e.ID_Embarazada}</td>
-              <td className="embarazada-td" data-label="Nombre">{e.Nombre}</td>
-              <td className="embarazada-td" data-label="Edad">{e.Edad}</td>
-              <td className="embarazada-td" data-label="Teléfono">{e.TELEFONO}</td>
-              <td className="embarazada-td" data-label="ID Dirección">{e.ID_Direccion}</td>
-              <td className="embarazada-td acciones" data-label="Acciones">
-                <button onClick={() => setEditandoEmbarazada(e)} className="btn-editar">Editar</button>
-                <button onClick={() => eliminarEmbarazada(e.ID_Embarazada)} className="btn-eliminar">Eliminar</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="table-section">
+        <h1 className="title">
+          Lista de Embarazadas
+          <button
+            onClick={() => setMostrarTablaEmbarazadas(!mostrarTablaEmbarazadas)}
+            className="btn-editar"
+            style={{ marginLeft: "15px", fontSize: "14px" }}
+          >
+            {mostrarTablaEmbarazadas ? "Ocultar" : "Mostrar"}
+          </button>
+        </h1>
 
-
-      {/* ===================== */}
-      {/* TABLA DE DIRECCIONES */}
-      {/* ===================== */}
-      <h1 className="title subtitulo">Direcciones</h1>
-      <table className="embarazada-table">
-        <thead className="embarazada-thead">
-          <tr className="embarazada-tr">
-            <th className="embarazada-th">ID</th>
-            <th className="embarazada-th">Calle</th>
-            <th className="embarazada-th">Ciudad</th>
-            <th className="embarazada-th">Municipio</th>
-            <th className="embarazada-th">Departamento</th>
-            <th className="embarazada-th">Zona</th>
-            <th className="embarazada-th">Avenida</th>
-            <th className="embarazada-th">Número de Casa</th>
-            <th className="embarazada-th acciones">Acciones</th>
-          </tr>
-        </thead>
-        <tbody className="embarazada-tbody">
-          {direcciones.map((d) => (
-            <tr key={d.ID_Direccion} className="embarazada-tr">
-              <td className="embarazada-td" data-label="ID">{d.ID_Direccion}</td>
-              <td className="embarazada-td" data-label="Calle">{d.Calle}</td>
-              <td className="embarazada-td" data-label="Ciudad">{d.Ciudad}</td>
-              <td className="embarazada-td" data-label="Municipio">{d.Municipio}</td>
-              <td className="embarazada-td" data-label="Departamento">{d.Departamento}</td>
-              <td className="embarazada-td" data-label="Zona">{d.Zona || "-"}</td>
-              <td className="embarazada-td" data-label="Avenida">{d.Avenida || "-"}</td>
-              <td className="embarazada-td" data-label="Número de Casa">{d.NumeroCasa || "-"}</td>
-              <td className="embarazada-td acciones" data-label="Acciones">
-                <button onClick={() => setEditandoDireccion(d)} className="btn-editar">Editar</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
+        {mostrarTablaEmbarazadas && (
+          <table className="embarazada-table">
+            <thead className="embarazada-thead">
+              <tr className="embarazada-tr">
+                <th className="embarazada-th">ID</th>
+                <th className="embarazada-th">Nombre</th>
+                <th className="embarazada-th">Edad</th>
+                <th className="embarazada-th">Teléfono</th>
+                <th className="embarazada-th">ID Dirección</th>
+                <th className="embarazada-th">Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="embarazada-tbody">
+              {embarazadas.map((e) => (
+                <tr key={e.ID_Embarazada} className="embarazada-tr">
+                  <td className="embarazada-td">{e.ID_Embarazada}</td>
+                  <td className="embarazada-td">{e.Nombre}</td>
+                  <td className="embarazada-td">{e.Edad}</td>
+                  <td className="embarazada-td">{e.TELEFONO}</td>
+                  <td className="embarazada-td">{e.ID_Direccion}</td>
+                  <td className="embarazada-td acciones">
+                    <button onClick={() => setEditandoEmbarazada(e)} className="btn-editar">Editar</button>
+                    <button onClick={() => eliminarEmbarazada(e.ID_Embarazada)} className="btn-eliminar">Eliminar</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
 
       {/* ===================== */}
-      {/* MODAL EMBARAZADA */}
+      {/* TABLA DIRECCIONES */}
+      {/* ===================== */}
+      <div className="table-section">
+        <h1 className="title subtitulo">
+          Direcciones
+          <button
+            onClick={() => setMostrarTablaDirecciones(!mostrarTablaDirecciones)}
+            className="btn-editar"
+            style={{ marginLeft: "15px", fontSize: "14px" }}
+          >
+            {mostrarTablaDirecciones ? "Ocultar" : "Mostrar"}
+          </button>
+        </h1>
+
+        {mostrarTablaDirecciones && (
+          <table className="embarazada-table">
+            <thead className="embarazada-thead">
+              <tr className="embarazada-tr">
+                <th className="embarazada-th">ID</th>
+                <th className="embarazada-th">Calle</th>
+                <th className="embarazada-th">Ciudad</th>
+                <th className="embarazada-th">Municipio</th>
+                <th className="embarazada-th">Departamento</th>
+                <th className="embarazada-th">Zona</th>
+                <th className="embarazada-th">Avenida</th>
+                <th className="embarazada-th">Número de Casa</th>
+                <th className="embarazada-th">Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="embarazada-tbody">
+              {direcciones.map((d) => (
+                <tr key={d.ID_Direccion} className="embarazada-tr">
+                  <td className="embarazada-td">{d.ID_Direccion}</td>
+                  <td className="embarazada-td">{d.Calle}</td>
+                  <td className="embarazada-td">{d.Ciudad}</td>
+                  <td className="embarazada-td">{d.Municipio}</td>
+                  <td className="embarazada-td">{d.Departamento}</td>
+                  <td className="embarazada-td">{d.Zona || "-"}</td>
+                  <td className="embarazada-td">{d.Avenida || "-"}</td>
+                  <td className="embarazada-td">{d.NumeroCasa || "-"}</td>
+                  <td className="embarazada-td acciones">
+                    <button onClick={() => setEditandoDireccion(d)} className="btn-editar">Editar</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* ===================== */}
+      {/* MODALES */}
       {/* ===================== */}
       {editandoEmbarazada && (
         <div className="modal-overlay">
           <form onSubmit={guardarEdicionEmbarazada} className="modal-box">
-            <h2 className="title">
-              Editar embarazada #{editandoEmbarazada.ID_Embarazada}
-            </h2>
+            <h2 className="title">Editar embarazada #{editandoEmbarazada.ID_Embarazada}</h2>
             <label className="modal-label">Nombre</label>
             <input name="nombre" defaultValue={editandoEmbarazada.Nombre} className="modal-input" required />
             <label className="modal-label">Edad</label>
@@ -304,20 +331,13 @@ export default function EmbarazadasPage() {
             <label className="modal-label">ID Dirección</label>
             <input name="direccion" type="number" defaultValue={editandoEmbarazada.ID_Direccion} className="modal-input" />
             <div className="modal-actions">
-              <button type="button" onClick={() => setEditandoEmbarazada(null)} className="modal-btn modal-btn-cancelar">
-                Cancelar
-              </button>
-              <button type="submit" className="modal-btn modal-btn-guardar">
-                Guardar
-              </button>
+              <button type="button" onClick={() => setEditandoEmbarazada(null)} className="modal-btn modal-btn-cancelar">Cancelar</button>
+              <button type="submit" className="modal-btn modal-btn-guardar">Guardar</button>
             </div>
           </form>
         </div>
       )}
 
-      {/* ===================== */}
-      {/* MODAL DIRECCIÓN */}
-      {/* ===================== */}
       {editandoDireccion && (
         <div className="modal-overlay">
           <form onSubmit={guardarEdicionDireccion} className="modal-box">
@@ -337,12 +357,8 @@ export default function EmbarazadasPage() {
             <label className="modal-label">Número de Casa</label>
             <input name="numeroCasa" defaultValue={editandoDireccion.NumeroCasa} className="modal-input" />
             <div className="modal-actions">
-              <button type="button" onClick={() => setEditandoDireccion(null)} className="modal-btn modal-btn-cancelar">
-                Cancelar
-              </button>
-              <button type="submit" className="modal-btn modal-btn-guardar">
-                Guardar
-              </button>
+              <button type="button" onClick={() => setEditandoDireccion(null)} className="modal-btn modal-btn-cancelar">Cancelar</button>
+              <button type="submit" className="modal-btn modal-btn-guardar">Guardar</button>
             </div>
           </form>
         </div>
