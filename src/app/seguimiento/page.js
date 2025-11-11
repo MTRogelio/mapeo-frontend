@@ -13,31 +13,56 @@ export default function SeguimientosPage() {
 
   const API = "https://mapeo-backend.vercel.app";
 
-  const fetchData = () => {
-    fetch(`${API}/seguimientos`)
-      .then((res) => res.json())
-      .then((data) => {
-        setSeguimientos(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
+  // ✅ Validación ANTES de parsear JSON
+  const fetchData = async () => {
+    try {
+      const res = await fetch(`${API}/seguimientos`);
+      
+      // Verificar si es OK antes de parsear
+      if (!res.ok) {
+        throw new Error(`Error ${res.status}: No se pudieron cargar los seguimientos`);
+      }
+      
+      const data = await res.json();
+      setSeguimientos(data);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error en fetchData:", err);
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
-  const fetchEmbarazadas = () => {
-    fetch(`${API}/embarazadas`)
-      .then((res) => res.json())
-      .then((data) => setEmbarazadas(data))
-      .catch((err) => setError(err.message));
+  const fetchEmbarazadas = async () => {
+    try {
+      const res = await fetch(`${API}/embarazadas`);
+      
+      if (!res.ok) {
+        throw new Error(`Error al cargar embarazadas`);
+      }
+      
+      const data = await res.json();
+      setEmbarazadas(data);
+    } catch (err) {
+      console.error("Error en fetchEmbarazadas:", err);
+      setError(err.message);
+    }
   };
 
-  const fetchUsuarios = () => {
-    fetch(`${API}/usuarios`)
-      .then((res) => res.json())
-      .then((data) => setUsuarios(data))
-      .catch((err) => setError(err.message));
+  const fetchUsuarios = async () => {
+    try {
+      const res = await fetch(`${API}/usuarios`);
+      
+      if (!res.ok) {
+        throw new Error(`Error al cargar usuarios`);
+      }
+      
+      const data = await res.json();
+      setUsuarios(data);
+    } catch (err) {
+      console.error("Error en fetchUsuarios:", err);
+      setError(err.message);
+    }
   };
 
   useEffect(() => {
@@ -51,9 +76,18 @@ export default function SeguimientosPage() {
 
   const eliminar = async (id) => {
     if (!confirm("¿Seguro de eliminar este seguimiento?")) return;
-    const res = await fetch(`${API}/seguimientos/${id}`, { method: "DELETE" });
-    if (res.ok) fetchData();
-    else alert("⚠ Error al eliminar");
+    
+    try {
+      const res = await fetch(`${API}/seguimientos/${id}`, { method: "DELETE" });
+      
+      if (res.ok) {
+        fetchData();
+      } else {
+        alert("⚠ Error al eliminar");
+      }
+    } catch (err) {
+      alert("⚠ Error de conexión: " + err.message);
+    }
   };
 
   const abrirModal = (seguimiento) => {
@@ -76,18 +110,23 @@ export default function SeguimientosPage() {
       Signos_Alarma: e.target.Signos_Alarma.value,
     };
 
-    const res = await fetch(`${API}/seguimientos/${editando.ID_Seguimiento}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    try {
+      const res = await fetch(`${API}/seguimientos/${editando.ID_Seguimiento}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    if (res.ok) {
-      alert("✅ Seguimiento actualizado correctamente");
-      cerrarModal();
-      fetchData();
-    } else {
-      alert("⚠ Error al actualizar seguimiento");
+      if (res.ok) {
+        alert("✅ Seguimiento actualizado correctamente");
+        cerrarModal();
+        fetchData();
+      } else {
+        const errorText = await res.text();
+        alert("⚠ Error al actualizar: " + errorText);
+      }
+    } catch (err) {
+      alert("⚠ Error de conexión: " + err.message);
     }
   };
 
@@ -101,16 +140,23 @@ export default function SeguimientosPage() {
       Signos_Alarma: e.target.Signos_Alarma.value,
     };
 
-    const res = await fetch(`${API}/seguimientos`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    try {
+      const res = await fetch(`${API}/seguimientos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    if (res.ok) {
-      fetchData();
-      e.target.reset();
-    } else alert("⚠ Error al agregar");
+      if (res.ok) {
+        fetchData();
+        e.target.reset();
+      } else {
+        const errorText = await res.text();
+        alert("⚠ Error al agregar: " + errorText);
+      }
+    } catch (err) {
+      alert("⚠ Error de conexión: " + err.message);
+    }
   };
 
   return (
@@ -181,7 +227,7 @@ export default function SeguimientosPage() {
         </tbody>
       </table>
 
-      {/* 🟢 Modal flotante con labels */}
+      {/* Modal flotante */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-contenido">
