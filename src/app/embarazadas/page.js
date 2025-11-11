@@ -15,6 +15,29 @@ const EmbarazadasPage = () => {
   const [mostrarTablaCombinada, setMostrarTablaCombinada] = useState(false);
   const [mostrarTablaEmbarazadas, setMostrarTablaEmbarazadas] = useState(false);
   const [mostrarTablaDirecciones, setMostrarTablaDirecciones] = useState(false);
+  const municipios = [
+    "Chicacao",
+    "Cuyotenango",
+    "Mazatenango",
+    "Patulul",
+    "Pueblo Nuevo",
+    "Río Bravo",
+    "Samayac",
+    "San Antonio Suchitepéquez",
+    "San Bernardino",
+    "San Francisco Zapotitlán",
+    "San Gabriel",
+    "San José El Ídolo",
+    "San Juan Bautista",
+    "San Lorenzo",
+    "San Miguel Panán",
+    "San Pablo Jocopilas",
+    "Santa Bárbara",
+    "Santo Domingo Suchitepéquez",
+    "Santo Tomás La Unión",
+    "Zunilito",
+    "San Andrés Villa Seca",
+  ];
 
   // ======== CARGA DE DATOS ========
   const cargarEmbarazadas = () => {
@@ -331,16 +354,16 @@ const EmbarazadasPage = () => {
                 }
               />
               <label className="modal-label">Municipio:</label>
-              <input
-                className="modal-input"
-                value={editandoDireccion.Municipio}
-                onChange={(e) =>
-                  setEditandoDireccion({
-                    ...editandoDireccion,
-                    Municipio: e.target.value,
-                  })
-                }
-              />
+              {/* 🔹 ComboBox de Municipio */}
+              <select name="Municipio" className="input" required>
+                <option value="">Seleccione un municipio</option>
+                {municipios.map((mun) => (
+                  <option key={mun} value={mun}>
+                    {mun}
+                  </option>
+                ))}
+              </select>
+              
               <label className="modal-label">Departamento:</label>
               <input
                 className="modal-input"
