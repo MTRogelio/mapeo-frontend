@@ -111,7 +111,7 @@ const EmbarazadasPage = () => {
       {/* TABLA COMBINADA */}
       {/* =============================== */}
       <div className="tabla-header">
-        <h1 className="title">👩‍🍼 Embarazadas con Dirección</h1>
+        <h1 className="title">Embarazadas con Dirección</h1>
         <button
           className="toggle-btn"
           onClick={() => setMostrarTablaCombinada(!mostrarTablaCombinada)}
