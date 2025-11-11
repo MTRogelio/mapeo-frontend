@@ -97,7 +97,7 @@ export default function RiesgosPage() {
           };
 
           const res = await fetch(
-            "https://mapeo-backend.vercel.appp/riesgos",
+            "https://mapeo-backend.vercel.app/riesgos",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
