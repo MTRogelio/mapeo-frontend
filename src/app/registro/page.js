@@ -1,149 +1,154 @@
-"use client";
-import { useEffect, useState } from "react";
-import "./registrar.css"; // 👈 Importamos los estilos
+app.post("/embarazadas", async (req, res) => {
+  const {
+    Nombre,
+    DPI,
+    Edad,
+    Telefono,
+    Calle,
+    Ciudad,
+    Municipio,
+    Departamento,
+    Zona,
+    Avenida,
+    NumeroCasa,
+    Latitud,
+    Longitud,
+  } = req.body;
 
-export default function RegistrarEmbarazada() {
-  const [mensaje, setMensaje] = useState("");
-  const [error, setError] = useState("");
-  const [coords, setCoords] = useState({ lat: "", lng: "" });
+  // ====== VALIDACIONES BACKEND ======
+  
+  // Validar campos obligatorios
+  if (!Nombre || !DPI || !Edad || !Telefono || !Calle || !Ciudad || 
+      !Municipio || !Departamento || !NumeroCasa) {
+    return res.status(400).json({ 
+      error: "⚠ Todos los campos obligatorios deben estar completos" 
+    });
+  }
 
-  const municipios = [
-    "Chicacao",
-    "Cuyotenango",
-    "Mazatenango",
-    "Patulul",
-    "Pueblo Nuevo",
-    "Río Bravo",
-    "Samayac",
-    "San Antonio Suchitepéquez",
-    "San Bernardino",
-    "San Francisco Zapotitlán",
-    "San Gabriel",
-    "San José El Ídolo",
-    "San Juan Bautista",
-    "San Lorenzo",
-    "San Miguel Panán",
-    "San Pablo Jocopilas",
-    "Santa Bárbara",
-    "Santo Domingo Suchitepéquez",
-    "Santo Tomás La Unión",
-    "Zunilito",
-    "San Andrés Villa Seca",
-  ];
+  // Validar DPI (13 dígitos)
+  if (!/^\d{13}$/.test(DPI)) {
+    return res.status(400).json({ 
+      error: "⚠ El DPI debe tener exactamente 13 dígitos numéricos" 
+    });
+  }
 
-  useEffect(() => {
-    const lat = localStorage.getItem("lat");
-    const lng = localStorage.getItem("lng");
-    if (lat && lng) {
-      setCoords({ lat, lng });
-    }
-  }, []);
+  // Validar Teléfono (8 dígitos)
+  if (!/^\d{8}$/.test(Telefono)) {
+    return res.status(400).json({ 
+      error: "⚠ El teléfono debe tener exactamente 8 dígitos numéricos" 
+    });
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setMensaje("");
-    setError("");
+  // Validar Número de Casa (solo números)
+  if (!/^\d+$/.test(NumeroCasa)) {
+    return res.status(400).json({ 
+      error: "⚠ El número de casa debe contener solo números" 
+    });
+  }
 
-    const data = {
-      Nombre: e.target.Nombre.value,
-      Edad: e.target.Edad.value,
-      Telefono: e.target.Telefono.value,
-      Calle: e.target.Calle.value,
-      Ciudad: e.target.Ciudad.value,
-      Municipio: e.target.Municipio.value,
-      Departamento: e.target.Departamento.value,
-      Zona: e.target.Zona.value || null,
-      Avenida: e.target.Avenida.value || null,
-      NumeroCasa: e.target.NumeroCasa.value,
-      Latitud: e.target.Latitud.value || null,
-      Longitud: e.target.Longitud.value || null,
-    };
+  try {
+    const pool = getConnection();
+    const transaction = pool.transaction();
 
-    if (!/^\d{8}$/.test(data.Telefono)) {
-      setError("⚠ El teléfono debe tener exactamente 8 dígitos numéricos");
-      return;
-    }
+    await transaction.begin();
 
     try {
-      const res = await fetch("https://mapeo-backend.vercel.app/embarazadas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+      // ====== VERIFICAR DUPLICADOS ======
+      
+      // 1. Verificar DPI duplicado
+      const checkDPI = await transaction
+        .request()
+        .input("DPI", DPI)
+        .query("SELECT 1 FROM Embarazada WHERE DPI = @DPI");
+
+      if (checkDPI.recordset.length > 0) {
+        await transaction.rollback();
+        return res.status(409).json({ 
+          error: "⚠ Ya existe una embarazada registrada con ese DPI" 
+        });
+      }
+
+      // 2. Verificar Teléfono duplicado
+      const checkTelefono = await transaction
+        .request()
+        .input("Telefono", Telefono)
+        .query("SELECT 1 FROM Embarazada WHERE Telefono = @Telefono");
+
+      if (checkTelefono.recordset.length > 0) {
+        await transaction.rollback();
+        return res.status(409).json({ 
+          error: "⚠ Ya existe una embarazada registrada con ese teléfono" 
+        });
+      }
+
+      // 3. Verificar dirección duplicada (Nombre + NumeroCasa)
+      const checkDireccion = await transaction
+        .request()
+        .input("Nombre", Nombre)
+        .input("NumeroCasa", NumeroCasa)
+        .query(`
+          SELECT 1 FROM Embarazada e
+          INNER JOIN Direccion d ON e.ID_Direccion = d.ID_Direccion
+          WHERE e.Nombre = @Nombre AND d.NumeroCasa = @NumeroCasa
+        `);
+
+      if (checkDireccion.recordset.length > 0) {
+        await transaction.rollback();
+        return res.status(409).json({ 
+          error: "⚠ Ya existe una embarazada con ese nombre y número de casa" 
+        });
+      }
+
+      // ====== INSERTAR DIRECCIÓN ======
+      const direccionResult = await transaction
+        .request()
+        .input("Calle", Calle)
+        .input("Ciudad", Ciudad)
+        .input("Municipio", Municipio)
+        .input("Departamento", Departamento)
+        .input("Zona", Zona || null)
+        .input("Avenida", Avenida || null)
+        .input("NumeroCasa", NumeroCasa)
+        .input("Latitud", Latitud || null)
+        .input("Longitud", Longitud || null)
+        .query(`
+          INSERT INTO Direccion (Calle, Ciudad, Municipio, Departamento, Zona, Avenida, NumeroCasa, Latitud, Longitud)
+          OUTPUT INSERTED.ID_Direccion
+          VALUES (@Calle, @Ciudad, @Municipio, @Departamento, @Zona, @Avenida, @NumeroCasa, @Latitud, @Longitud)
+        `);
+
+      const idDireccion = direccionResult.recordset[0].ID_Direccion;
+
+      // ====== INSERTAR EMBARAZADA ======
+      await transaction
+        .request()
+        .input("Nombre", Nombre)
+        .input("DPI", DPI)
+        .input("Edad", Edad)
+        .input("Telefono", Telefono)
+        .input("ID_Direccion", idDireccion)
+        .query(`
+          INSERT INTO Embarazada (Nombre, DPI, Edad, Telefono, ID_Direccion)
+          VALUES (@Nombre, @DPI, @Edad, @Telefono, @ID_Direccion)
+        `);
+
+      // Confirmar transacción
+      await transaction.commit();
+
+      res.status(201).json({ 
+        message: "✅ Embarazada registrada correctamente" 
       });
 
-      if (res.ok) {
-        const result = await res.json();
-        setMensaje(result.message);
-        e.target.reset();
-        localStorage.removeItem("lat");
-        localStorage.removeItem("lng");
-        setCoords({ lat: "", lng: "" });
-      } else {
-        const result = await res.json();
-        setError(result.error || "⚠ Error al registrar embarazada");
-      }
     } catch (err) {
-      setError("⚠ Error de conexión con el servidor");
+      // Si hay error, deshacer todo
+      await transaction.rollback();
+      throw err;
     }
-  };
 
-  return (
-    <div className="form-container">
-      <h1 className="form-title">Registrar Embarazada</h1>
-
-      {mensaje && <p className="success-message">{mensaje}</p>}
-      {error && <p className="error-message">{error}</p>}
-
-      <form onSubmit={handleSubmit} className="form">
-        <input name="Nombre" placeholder="Nombre" className="input" required />
-        <input type="number" name="Edad" placeholder="Edad" className="input" required />
-        <input type="text" name="Telefono" placeholder="Teléfono" className="input" required />
-
-        <input name="Calle" placeholder="Calle" className="input" required />
-        <input name="Ciudad" placeholder="Ciudad" className="input" required />
-
-        {/* 🔹 ComboBox de Municipio */}
-        <select name="Municipio" className="input" required>
-          <option value="">Seleccione un municipio</option>
-          {municipios.map((mun) => (
-            <option key={mun} value={mun}>
-              {mun}
-            </option>
-          ))}
-        </select>
-
-        <input name="Departamento" placeholder="Departamento" className="input" required />
-
-        {/* 🔹 Campos opcionales */}
-        <input name="Zona" placeholder="Zona (opcional)" className="input" />
-        <input name="Avenida" placeholder="Avenida (opcional)" className="input" />
-        <input name="NumeroCasa" placeholder="Número de casa" className="input" required />
-
-        <div className="coord-grid">
-          <input
-            type="number"
-            step="0.000001"
-            name="Latitud"
-            placeholder="Latitud"
-            className="input"
-            value={coords.lat}
-            onChange={(e) => setCoords({ ...coords, lat: e.target.value })}
-          />
-          <input
-            type="number"
-            step="0.000001"
-            name="Longitud"
-            placeholder="Longitud"
-            className="input"
-            value={coords.lng}
-            onChange={(e) => setCoords({ ...coords, lng: e.target.value })}
-          />
-        </div>
-
-        <button type="submit" className="btn-submit">
-          Guardar
-        </button>
-      </form>
-    </div>
-  );
-}
+  } catch (err) {
+    console.error("Error al registrar embarazada:", err);
+    res.status(500).json({ 
+      error: "⚠ Error interno del servidor: " + err.message 
+    });
+  }
+});
