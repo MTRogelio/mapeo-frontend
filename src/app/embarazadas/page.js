@@ -12,6 +12,25 @@ export default function EmbarazadasPage() {
   // ======== ESTADOS DIRECCIONES ========
   const [direcciones, setDirecciones] = useState([]);
   const [editandoDireccion, setEditandoDireccion] = useState(null);
+  const [embarazadasConDireccion, setEmbarazadasConDireccion] = useState([]);
+
+  // ======== CARGAR DATOS COMBINADOS ========
+  const cargarEmbarazadasConDireccion = () => {
+    fetch("https://mapeo-backend.vercel.app/embarazadas-direcciones")
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al obtener embarazadas con dirección");
+        return res.json();
+      })
+      .then((data) => setEmbarazadasConDireccion(data))
+      .catch((err) => console.error(err));
+  };
+
+  // Asegúrate de llamarla en el useEffect
+  useEffect(() => {
+    cargarEmbarazadas();
+    cargarDirecciones();
+    cargarEmbarazadasConDireccion(); // 👈 nueva llamada
+  }, []);
 
   // ======== CARGAR DATOS ========
   const cargarEmbarazadas = () => {
@@ -151,6 +170,45 @@ export default function EmbarazadasPage() {
 
   return (
     <div className="container">
+      {/* =============================== */}
+      {/* TABLA COMBINADA EMBARAZADA + DIRECCIÓN */}
+      {/* =============================== */}
+      <h1 className="title">👩‍🍼 Embarazadas con Dirección</h1>
+      <table className="embarazada-table">
+        <thead className="embarazada-thead">
+          <tr className="embarazada-tr">
+            <th className="embarazada-th">ID Embarazada</th>
+            <th className="embarazada-th">Nombre</th>
+            <th className="embarazada-th">Edad</th>
+            <th className="embarazada-th">Teléfono</th>
+            <th className="embarazada-th">Calle</th>
+            <th className="embarazada-th">Ciudad</th>
+            <th className="embarazada-th">Municipio</th>
+            <th className="embarazada-th">Departamento</th>
+            <th className="embarazada-th">Zona</th>
+            <th className="embarazada-th">Avenida</th>
+            <th className="embarazada-th">Número Casa</th>
+          </tr>
+        </thead>
+        <tbody className="embarazada-tbody">
+          {embarazadasConDireccion.map((item) => (
+            <tr key={item.ID_Embarazada} className="embarazada-tr">
+              <td className="embarazada-td" data-label="ID">{item.ID_Embarazada}</td>
+              <td className="embarazada-td" data-label="Nombre">{item.Nombre}</td>
+              <td className="embarazada-td" data-label="Edad">{item.Edad}</td>
+              <td className="embarazada-td" data-label="Teléfono">{item.Telefono}</td>
+              <td className="embarazada-td" data-label="Calle">{item.Calle}</td>
+              <td className="embarazada-td" data-label="Ciudad">{item.Ciudad}</td>
+              <td className="embarazada-td" data-label="Municipio">{item.Municipio}</td>
+              <td className="embarazada-td" data-label="Departamento">{item.Departamento}</td>
+              <td className="embarazada-td" data-label="Zona">{item.Zona || "-"}</td>
+              <td className="embarazada-td" data-label="Avenida">{item.Avenida || "-"}</td>
+              <td className="embarazada-td" data-label="Número Casa">{item.NumeroCasa || "-"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
       {/* ===================== */}
       {/* TABLA DE EMBARAZADAS */}
       {/* ===================== */}
