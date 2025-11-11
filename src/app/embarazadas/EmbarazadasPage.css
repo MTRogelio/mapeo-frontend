@@ -100,7 +100,7 @@
   padding: 25px;
   border-radius: 12px;
   width: 95%;
-  max-width: 500px;
+  max-width: 450px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   animation: fadeIn 0.3s ease;
 }
@@ -142,7 +142,7 @@
 
 .modal-input:focus {
   border-color: #007bff;
-  background-color: #fff;      /* 👈 Fondo blanco para resaltar */
+  background-color: #fff;
   box-shadow: 0 0 5px rgba(0,123,255,0.4);
 }
 
