@@ -148,7 +148,7 @@ app.post("/embarazadas", async (req, res) => {
   } catch (err) {
     console.error("Error al registrar la embarazada:", err);
     res.status(500).json({ 
-      error: "⚠ Error interno del servidor: " + err.message 
+      error: "⚠ huy, Error interno del servidor: " + err.message 
     });
   }
 });
