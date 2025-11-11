@@ -92,6 +92,8 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  overflow-y: auto; /* 👈 Permite scroll si el modal es alto */
+  padding: 20px;
 }
 
 /* Caja del modal */
@@ -100,7 +102,9 @@
   padding: 25px;
   border-radius: 12px;
   width: 95%;
-  max-width: 450px;
+  max-width: 480px;
+  max-height: 90vh; /* 👈 No más alto que 90% de la pantalla */
+  overflow-y: auto; /* 👈 Hace scroll interno si hay muchos campos */
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   animation: fadeIn 0.3s ease;
 }
