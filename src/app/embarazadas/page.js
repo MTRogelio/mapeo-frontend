@@ -68,13 +68,34 @@ const EmbarazadasPage = () => {
   }, []);
 
   // ======== ELIMINAR ========
-  const eliminarEmbarazada = (id) => {
-    if (window.confirm("¿Seguro que deseas eliminar este registro?")) {
-      fetch(`https://mapeo-backend.vercel.app/embarazadas/${id}`, {
-        method: "DELETE",
-      }).then(() => cargarEmbarazadas());
+  const eliminarEmbarazada = async (id) => {
+    if (!confirm("¿Seguro que deseas eliminar este registro?")) return;
+
+    // Buscar la embarazada para obtener su ID_Direccion
+    const embarazada = embarazadas.find((e) => e.ID_Embarazada === id);
+    const idDireccion = embarazada?.ID_Direccion;
+
+    // Eliminar la embarazada
+    const res = await fetch(`https://mapeo-backend.vercel.app/embarazadas/${id}`, {
+      method: "DELETE",
+    });
+
+    if (res.ok) {
+      // Si tenía dirección, eliminarla también
+      if (idDireccion) {
+        await fetch(`https://mapeo-backend.vercel.app/direcciones/${idDireccion}`, {
+          method: "DELETE",
+        });
+      }
+
+      alert("🗑️ Embarazada y dirección eliminadas correctamente");
+      cargarEmbarazadas();
+      cargarDirecciones();
+    } else {
+      alert("⚠ Error al eliminar");
     }
   };
+
 
   // ======== GUARDAR CAMBIOS ========
   const guardarCambiosEmbarazada = () => {
