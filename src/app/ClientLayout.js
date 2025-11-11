@@ -14,7 +14,7 @@ export default function ClientLayout({ children }) {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const res = await fetch("https://backend-demo-xowfm.ondigitalocean.app/check-session", {
+        const res = await fetch("https://mapeo-backend.vercel.app/check-session", {
           credentials: "include",
         });
 
@@ -40,7 +40,7 @@ export default function ClientLayout({ children }) {
 
   async function handleLogout() {
     try {
-      await fetch("https://backend-demo-xowfm.ondigitalocean.app/logout", {
+      await fetch("https://mapeo-backend.vercel.app/logout", {
         method: "POST",
         credentials: "include",
       });

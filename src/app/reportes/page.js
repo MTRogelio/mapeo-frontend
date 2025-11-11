@@ -31,7 +31,7 @@ export default function Reportes() {
   ];
 
   useEffect(() => {
-    fetch("https://backend-demo-xowfm.ondigitalocean.app/embarazadas-con-direccion")
+    fetch("https://mapeo-backend.vercel.app/embarazadas-con-direccion")
       .then((res) => res.json())
       .then((data) => {
         const conteosMunicipios = {};

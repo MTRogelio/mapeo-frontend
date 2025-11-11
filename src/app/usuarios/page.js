@@ -11,7 +11,7 @@ export default function UsuariosPage() {
   const rolesDisponibles = ["Usuario", "Admin", "Supervisor"];
 
   const cargarUsuarios = () => {
-    fetch("https://backend-demo-xowfm.ondigitalocean.app/usuarios")
+    fetch("https://mapeo-backend.vercel.app/usuarios")
       .then((res) => {
         if (!res.ok) throw new Error("Error al obtener los usuarios");
         return res.json();
@@ -64,7 +64,7 @@ export default function UsuariosPage() {
       return;
     }
 
-    const res = await fetch("https://backend-demo-xowfm.ondigitalocean.app/usuarios", {
+    const res = await fetch("https://mapeo-backend.vercel.app/usuarios", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -90,7 +90,7 @@ export default function UsuariosPage() {
 
   const eliminarUsuario = async (id) => {
     if (!confirm("¿Eliminar este usuario?")) return;
-    const res = await fetch(`https://backend-demo-xowfm.ondigitalocean.app/usuarios/${id}`, {
+    const res = await fetch(`https://mapeo-backend.vercel.app/usuarios/${id}`, {
       method: "DELETE",
     });
     if (res.ok) {
@@ -114,7 +114,7 @@ export default function UsuariosPage() {
       return;
     }
 
-    const res = await fetch(`https://backend-demo-xowfm.ondigitalocean.app/usuarios/${editando.ID_Usuario}`, {
+    const res = await fetch(`https://mapeo-backend.vercel.app/usuarios/${editando.ID_Usuario}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

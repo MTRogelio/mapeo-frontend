@@ -11,7 +11,7 @@ export default function SeguimientosPage() {
   const [editando, setEditando] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const API = "https://backend-demo-xowfm.ondigitalocean.app";
+  const API = "https://mapeo-backend.vercel.app";
 
   const fetchData = () => {
     fetch(`${API}/seguimientos`)

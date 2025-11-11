@@ -15,7 +15,7 @@ export default function EmbarazadasPage() {
 
   // ======== CARGAR DATOS ========
   const cargarEmbarazadas = () => {
-    fetch("https://backend-demo-xowfm.ondigitalocean.app/embarazadas")
+    fetch("https://mapeo-backend.vercel.app/embarazadas")
       .then((res) => {
         if (!res.ok) throw new Error("Error al obtener las embarazadas");
         return res.json();
@@ -31,7 +31,7 @@ export default function EmbarazadasPage() {
   };
 
   const cargarDirecciones = () => {
-    fetch("https://backend-demo-xowfm.ondigitalocean.app/direcciones")
+    fetch("https://mapeo-backend.vercel.app/direcciones")
       .then((res) => {
         if (!res.ok) throw new Error("Error al obtener direcciones");
         return res.json();
@@ -49,7 +49,7 @@ export default function EmbarazadasPage() {
   const eliminarEmbarazada = async (id) => {
     if (!confirm("¿Seguro que deseas eliminar este registro?")) return;
 
-    const res = await fetch(`https://backend-demo-xowfm.ondigitalocean.app/embarazadas/${id}`, {
+    const res = await fetch(`https://mapeo-backend.vercel.app/embarazadas/${id}`, {
       method: "DELETE",
     });
 
@@ -71,7 +71,7 @@ export default function EmbarazadasPage() {
     };
 
     const res = await fetch(
-      `https://backend-demo-xowfm.ondigitalocean.app/embarazadas/${editandoEmbarazada.ID_Embarazada}`,
+      `https://mapeo-backend.vercel.app/embarazadas/${editandoEmbarazada.ID_Embarazada}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -91,7 +91,7 @@ export default function EmbarazadasPage() {
   // ======== CRUD DIRECCIONES ========
   const eliminarDireccion = async (id) => {
     if (!confirm("¿Eliminar esta dirección?")) return;
-    const res = await fetch(`https://backend-demo-xowfm.ondigitalocean.app/direcciones/${id}`, {
+    const res = await fetch(`https://mapeo-backend.vercel.app/direcciones/${id}`, {
       method: "DELETE",
     });
     if (res.ok) {
@@ -115,7 +115,7 @@ export default function EmbarazadasPage() {
     };
 
     const res = await fetch(
-      `https://backend-demo-xowfm.ondigitalocean.app/direcciones/${editandoDireccion.ID_Direccion}`,
+      `https://mapeo-backend.vercel.app/direcciones/${editandoDireccion.ID_Direccion}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

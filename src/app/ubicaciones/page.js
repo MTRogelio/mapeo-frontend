@@ -18,7 +18,7 @@ export default function UbicacionesPage() {
 
   // === Cargar ubicaciones ===
   const fetchData = () => {
-    fetch("https://backend-demo-xowfm.ondigitalocean.app/ubicaciones")
+    fetch("https://mapeo-backend.vercel.app/ubicaciones")
       .then((res) => res.json())
       .then((data) => {
         setUbicaciones(data);

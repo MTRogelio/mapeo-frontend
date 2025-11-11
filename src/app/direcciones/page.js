@@ -9,7 +9,7 @@ export default function DireccionesPage() {
   const [editando, setEditando] = useState(null);
 
   const cargarDirecciones = () => {
-    fetch("https://backend-demo-xowfm.ondigitalocean.app/direcciones")
+    fetch("https://mapeo-backend.vercel.app/direcciones")
       .then((res) => {
         if (!res.ok) throw new Error("Error al obtener direcciones");
         return res.json();
@@ -30,7 +30,7 @@ export default function DireccionesPage() {
 
   const eliminarDireccion = async (id) => {
     if (!confirm("¿Eliminar esta dirección?")) return;
-    const res = await fetch(`https://backend-demo-xowfm.ondigitalocean.app/direcciones/${id}`, { method: "DELETE" });
+    const res = await fetch(`https://mapeo-backend.vercel.app/direcciones/${id}`, { method: "DELETE" });
     if (res.ok) {
       alert("🗑️ Dirección eliminada");
       cargarDirecciones();
@@ -51,7 +51,7 @@ export default function DireccionesPage() {
       NumeroCasa: e.target.numeroCasa.value || null,
     };
 
-    const res = await fetch(`https://backend-demo-xowfm.ondigitalocean.app/direcciones/${editando.ID_Direccion}`, {
+    const res = await fetch(`https://mapeo-backend.vercel.app/direcciones/${editando.ID_Direccion}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),

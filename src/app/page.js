@@ -13,7 +13,7 @@ export default function Login() {
     const contrasena = document.querySelector("#contrasena").value;
 
     try {
-      const res = await fetch("https://backend-demo-xowfm.ondigitalocean.app/login", {
+      const res = await fetch("https://mapeo-backend.vercel.app/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

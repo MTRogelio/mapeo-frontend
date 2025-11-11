@@ -84,7 +84,7 @@ export default function Mapa() {
 
   // 🚀 Obtener embarazadas
   useEffect(() => {
-    fetch("https://backend-demo-xowfm.ondigitalocean.app/embarazadas-con-direccion")
+    fetch("https://mapeo-backend.vercel.app/embarazadas-con-direccion")
       .then((res) => res.json())
       .then((data) => setEmbarazadas(data))
       .catch((err) => console.error("⚠ Error cargando embarazadas:", err));

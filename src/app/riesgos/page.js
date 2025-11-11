@@ -16,7 +16,7 @@ export default function RiesgosPage() {
 
   // Cargar riesgos
   const cargarRiesgos = () => {
-    fetch("https://backend-demo-xowfm.ondigitalocean.app/riesgos")
+    fetch("https://mapeo-backend.vercel.app/riesgos")
       .then((res) => res.json())
       .then((data) => {
         setRiesgos(data);
