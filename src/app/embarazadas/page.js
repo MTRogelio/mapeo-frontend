@@ -215,7 +215,6 @@ export default function EmbarazadasPage() {
               <td className="embarazada-td" data-label="Número de Casa">{d.NumeroCasa || "-"}</td>
               <td className="embarazada-td acciones" data-label="Acciones">
                 <button onClick={() => setEditandoDireccion(d)} className="btn-editar">Editar</button>
-                <button onClick={() => eliminarDireccion(d.ID_Direccion)} className="btn-eliminar">Eliminar</button>
               </td>
             </tr>
           ))}
