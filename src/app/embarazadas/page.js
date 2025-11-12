@@ -149,6 +149,7 @@ const EmbarazadasPage = () => {
               <th className="embarazada-th">Nombre</th>
               <th className="embarazada-th">Edad</th>
               <th className="embarazada-th">Teléfono</th>
+              <th className="embarazada-th">Semanas de Embarazo</th>
               <th className="embarazada-th">DPI</th>
               <th className="embarazada-th">Calle</th>
               <th className="embarazada-th">Ciudad</th>
@@ -166,6 +167,7 @@ const EmbarazadasPage = () => {
                 <td className="embarazada-td" data-label="Nombre">{e.Nombre}</td>
                 <td className="embarazada-td" data-label="Edad">{e.Edad}</td>
                 <td className="embarazada-td" data-label="Teléfono">{e.Telefono}</td>
+                <td className="embarazada-td" data-label="NumSemanas">{e.NumSemanas}</td>
                 <td className="embarazada-td" data-label="DPI">{e.DPI}</td>
                 <td className="embarazada-td" data-label="Calle">{e.Calle}</td>
                 <td className="embarazada-td" data-label="Ciudad">{e.Ciudad}</td>
@@ -201,6 +203,7 @@ const EmbarazadasPage = () => {
               <th className="embarazada-th">Nombre</th>
               <th className="embarazada-th">Edad</th>
               <th className="embarazada-th">Telefono</th>
+              <th className="embarazada-th">Semanas de Embarazo</th>
               <th className="embarazada-th">DPI</th>
               <th className="embarazada-th">ID Dirección</th>
               <th className="embarazada-th">Acciones</th>
@@ -213,6 +216,7 @@ const EmbarazadasPage = () => {
                 <td className="embarazada-td" data-label="Nombre">{e.Nombre}</td>
                 <td className="embarazada-td" data-label="Edad">{e.Edad}</td>
                 <td className="embarazada-td" data-label="Teléfono">{e.Telefono}</td>
+                <td className="embarazada-td" data-label="NumSemanas">{e.NumSemanas}</td>
                 <td className="embarazada-td" data-label="DPI">{e.DPI}</td>
                 <td className="embarazada-td" data-label="ID Dirección">{e.ID_Direccion}</td>
                 <td className="embarazada-td" data-label="Acciones">
@@ -321,11 +325,22 @@ const EmbarazadasPage = () => {
               <label className="modal-label">Teléfono:</label>
               <input
                 className="modal-input"
-                value={editandoEmbarazada.TELEFONO}
+                value={editandoEmbarazada.Telefono}
                 onChange={(e) =>
                   setEditandoEmbarazada({
                     ...editandoEmbarazada,
-                    TELEFONO: e.target.value,
+                    Telefono: e.target.value,
+                  })
+                }
+              />
+              <label className="modal-label">Semanas de Embarazo:</label>
+              <input
+                className="modal-input"
+                value={editandoEmbarazada.NumSemanas}
+                onChange={(e) =>
+                  setEditandoEmbarazada({
+                    ...editandoEmbarazada,
+                    NumSemanas: e.target.value,
                   })
                 }
               />
