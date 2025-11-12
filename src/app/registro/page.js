@@ -48,6 +48,7 @@ export default function RegistrarEmbarazada() {
       Nombre: e.target.Nombre.value,
       Edad: e.target.Edad.value,
       Telefono: e.target.Telefono.value,
+      DPI: e.target.DPI.value,
       Calle: e.target.Calle.value,
       Ciudad: e.target.Ciudad.value,
       Municipio: e.target.Municipio.value,
@@ -98,6 +99,7 @@ export default function RegistrarEmbarazada() {
         <input name="Nombre" placeholder="Nombre" className="input" required />
         <input type="number" name="Edad" placeholder="Edad" className="input" required />
         <input type="text" name="Telefono" placeholder="Teléfono" className="input" required />
+        <input type="number" name="DPI" placeholder="DPI" className="input" required />
 
         <input name="Calle" placeholder="Calle" className="input" required />
         <input name="Ciudad" placeholder="Ciudad" className="input" required />

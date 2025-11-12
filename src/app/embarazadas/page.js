@@ -149,6 +149,7 @@ const EmbarazadasPage = () => {
               <th className="embarazada-th">Nombre</th>
               <th className="embarazada-th">Edad</th>
               <th className="embarazada-th">Teléfono</th>
+              <th className="embarazada-th">DPI</th>
               <th className="embarazada-th">Calle</th>
               <th className="embarazada-th">Ciudad</th>
               <th className="embarazada-th">Municipio</th>
@@ -165,6 +166,7 @@ const EmbarazadasPage = () => {
                 <td className="embarazada-td" data-label="Nombre">{e.Nombre}</td>
                 <td className="embarazada-td" data-label="Edad">{e.Edad}</td>
                 <td className="embarazada-td" data-label="Teléfono">{e.Telefono}</td>
+                <td className="embarazada-td" data-label="DPI">{e.DPI}</td>
                 <td className="embarazada-td" data-label="Calle">{e.Calle}</td>
                 <td className="embarazada-td" data-label="Ciudad">{e.Ciudad}</td>
                 <td className="embarazada-td" data-label="Municipio">{e.Municipio}</td>
@@ -199,6 +201,7 @@ const EmbarazadasPage = () => {
               <th className="embarazada-th">Nombre</th>
               <th className="embarazada-th">Edad</th>
               <th className="embarazada-th">Teléfono</th>
+              <th className="embarazada-th">DPI</th>
               <th className="embarazada-th">ID Dirección</th>
               <th className="embarazada-th">Acciones</th>
             </tr>
@@ -210,6 +213,7 @@ const EmbarazadasPage = () => {
                 <td className="embarazada-td" data-label="Nombre">{e.Nombre}</td>
                 <td className="embarazada-td" data-label="Edad">{e.Edad}</td>
                 <td className="embarazada-td" data-label="Teléfono">{e.TELEFONO}</td>
+                <td className="embarazada-td" data-label="DPI">{e.DPI}</td>
                 <td className="embarazada-td" data-label="ID Dirección">{e.ID_Direccion}</td>
                 <td className="embarazada-td" data-label="Acciones">
                   <button
@@ -325,6 +329,18 @@ const EmbarazadasPage = () => {
                   })
                 }
               />
+              <label className="modal-label">DPI:</label>
+              <input
+                className="modal-input"
+                value={editandoEmbarazada.DPI}
+                onChange={(e) =>
+                  setEditandoEmbarazada({
+                    ...editandoEmbarazada,
+                    DPI: e.target.value,
+                  })
+                }
+              />
+
               <div className="modal-actions">
                 <button
                   className="modal-btn modal-btn-cancelar"
