@@ -200,7 +200,7 @@ const EmbarazadasPage = () => {
               <th className="embarazada-th">ID</th>
               <th className="embarazada-th">Nombre</th>
               <th className="embarazada-th">Edad</th>
-              <th className="embarazada-th">Teléfono</th>
+              <th className="embarazada-th">Telefono</th>
               <th className="embarazada-th">DPI</th>
               <th className="embarazada-th">ID Dirección</th>
               <th className="embarazada-th">Acciones</th>
@@ -212,7 +212,7 @@ const EmbarazadasPage = () => {
                 <td className="embarazada-td" data-label="ID">{e.ID_Embarazada}</td>
                 <td className="embarazada-td" data-label="Nombre">{e.Nombre}</td>
                 <td className="embarazada-td" data-label="Edad">{e.Edad}</td>
-                <td className="embarazada-td" data-label="Teléfono">{e.TELEFONO}</td>
+                <td className="embarazada-td" data-label="Teléfono">{e.Telefono}</td>
                 <td className="embarazada-td" data-label="DPI">{e.DPI}</td>
                 <td className="embarazada-td" data-label="ID Dirección">{e.ID_Direccion}</td>
                 <td className="embarazada-td" data-label="Acciones">
