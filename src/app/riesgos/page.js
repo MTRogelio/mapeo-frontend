@@ -90,8 +90,21 @@ export default function RiesgosPage() {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
+
+          const idSeleccionado = e.target.ID_Embarazada.value;
+
+          // ⛔ VALIDACIÓN — verificar si ya tiene un riesgo
+          const yaTieneRiesgo = riesgos.some(
+            (r) => String(r.ID_Embarazada) === String(idSeleccionado)
+          );
+
+          if (yaTieneRiesgo) {
+            alert("⚠ Esta embarazada ya tiene un riesgo asignado. Selecciona otra.");
+            return;
+          }
+
           const data = {
-            ID_Embarazada: e.target.ID_Embarazada.value,
+            ID_Embarazada: idSeleccionado,
             Fecha_Riesgo: e.target.Fecha_Riesgo.value,
             Nivel: e.target.Nivel.value,
           };
