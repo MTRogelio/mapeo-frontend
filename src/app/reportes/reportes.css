@@ -1,0 +1,115 @@
+/* ============================= */
+/* 📊 REPORTES Y ESTADÍSTICAS    */
+/* ============================= */
+
+.reportes-container {
+  padding: 20px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+.reportes-title {
+  color: #1a1a1a;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* ============================= */
+/* GRID DE TARJETAS              */
+/* ============================= */
+
+.reportes-grid {
+  display: grid;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+/* 🎯 Centrar la gráfica de pastel (solo la primera sección) */
+.reportes-grid:first-of-type {
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================= */
+/* TARJETAS DE GRÁFICAS          */
+/* ============================= */
+
+.report-card {
+  flex: 0 1 400px;
+  max-width: 500px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.report-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Título de tarjeta */
+.report-card-title {
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2e7d32;
+  text-align: center;
+}
+
+/* ============================= */
+/* 🔍 BUSCADOR DE MUNICIPIOS     */
+/* ============================= */
+
+.buscador-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 20px auto;
+  flex-wrap: wrap;
+}
+
+.buscador-input {
+  padding: 8px 12px;
+  border: 2px solid #2e7d32;
+  border-radius: 8px;
+  width: 250px;
+  outline: none;
+  transition: all 0.2s;
+  color: #000;              /* texto negro */
+  font-weight: bold;        /* texto en negrita */
+  background-color: #fff;   /* fondo blanco */
+}
+
+.buscador-input:focus {
+  border-color: #388e3c;
+  box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+}
+
+.buscador-btn {
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.buscador-btn:hover {
+  background-color: #1b5e20;
+}
+
+/* ============================= */
+/* RESPONSIVE                    */
+/* ============================= */
+@media (max-width: 768px) {
+  .reportes-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,303 @@
+/* 🎨 Contenedor general */
+.mapa-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #3307f3;
+  overflow: hidden;
+}
+
+/* 🏷️ Encabezado más compacto */
+.mapa-header {
+  text-align: center;
+  background: linear-gradient(90deg, #2400d6, #3307f3);
+  color: #fff;
+  padding-top: 5px;
+  padding-bottom: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  line-height: 1;
+}
+
+/* 🧭 Título principal */
+.mapa-title {
+  font-size: 2.3rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1;
+  position: relative;
+  top: -3px; /* lo sube un poquito */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* 🖥️ Subtítulo */
+.mapa-subtitle {
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin: 0; /* ❗ sin espacio entre título y subtítulo */
+  letter-spacing: 0.5px;
+}
+
+/* 💜 Programa */
+.mapa-programa {
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin: 0;
+  margin-top: 2px; /* deja solo un mínimo espacio */
+  opacity: 0.9;
+}
+
+
+/* 🔝 Barra superior (botón debajo del título) */
+.mapa-topbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #2a05c7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+/* 📍 Botón Mi Ubicación */
+.btn-ubicacion {
+  padding: 10px 18px;
+  background-color: #007aff;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-ubicacion:hover {
+  background-color: #005fcc;
+  transform: scale(1.05);
+}
+
+/* 🗺️ Contenedor del mapa */
+.mapa-leaflet {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  position: relative;
+}
+
+/* 📦 Botón dentro del popup */
+.popup-button {
+  margin-top: 5px;
+  padding: 6px 10px;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup-button:hover {
+  background-color: #256628;
+}
+
+/* 📱 Responsividad */
+
+/* Pantallas grandes (PC) */
+@media (min-width: 1025px) {
+  .mapa-title {
+    font-size: 2.5rem;
+    padding: 20px;
+  }
+
+  .btn-ubicacion {
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 1024px) and (min-width: 601px) {
+  .mapa-title {
+    font-size: 1.8rem;
+  }
+
+  .btn-ubicacion {
+    padding: 10px 16px;
+    font-size: 15px;
+  }
+}
+
+/* Teléfonos */
+@media (max-width: 600px) {
+  .mapa-title {
+    font-size: 1.4rem;
+    padding: 10px;
+  }
+
+  .mapa-topbar {
+    padding: 8px;
+  }
+
+  .btn-ubicacion {
+    font-size: 14px;
+    padding: 8px 14px;
+    border-radius: 10px;
+  }
+
+  .popup-button {
+    font-size: 14px;
+    padding: 5px 8px;
+  }
+}
+
+.mapa-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #3307f3;
+  overflow: hidden;
+}
+
+/* 🧭 Título */
+.mapa-title {
+  text-align: center;
+  color: #ffffff;
+  padding: 15px;
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin: 0;
+  background: linear-gradient(90deg, #2400d6, #3307f3);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* 🔝 Barra superior con varios botones */
+.mapa-topbar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  background-color: #2a05c7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+/* 🎛️ Botones de control */
+.mapa-btn {
+  background-color: #007aff;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+.mapa-btn {
+  display: flex;
+  align-items: center; /* centra verticalmente el texto y el icono */
+  justify-content: center; /* centra el contenido dentro del botón */
+  gap: 8px; /* espacio entre icono y texto */
+}
+
+.mapa-btn:hover {
+  background-color: #005fcc;
+  transform: scale(1.05);
+}
+
+/* 🗺️ Mapa */
+.mapa-leaflet {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Popup */
+.popup-button {
+  margin-top: 5px;
+  padding: 6px 10px;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup-button:hover {
+  background-color: #256628;
+}
+
+/* 📱 Responsivo */
+@media (max-width: 768px) {
+  .mapa-title {
+    font-size: 1.6rem;
+  }
+
+  .mapa-btn {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
+
+/* 🖼️ Ícono dentro de los botones */
+.btn-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  vertical-align: middle;
+  filter: brightness(0) invert(1); /* lo vuelve blanco si tu ícono es oscuro */
+}
+
+/* En pantallas pequeñas reducimos el ícono */
+@media (max-width: 600px) {
+  .btn-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+  }
+}
+
+.mapa-input {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 15px;
+  outline: none;
+  width: 180px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.mapa-input:focus {
+  outline: 2px solid #007aff;
+}
+
+@media (max-width: 600px) {
+  .mapa-input {
+    width: 140px;
+    font-size: 14px;
+  }
+}
+
+.gif-overlay img {
+  animation: pulse 2s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1) translate(-50%, -50%); opacity: 1; }
+  100% { transform: scale(1.4) translate(-50%, -50%); opacity: 0; }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
