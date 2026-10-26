@@ -40,6 +40,19 @@ export default function ClientLayout({ children }) {
     checkSession();
   }, [router, pathname]);
 
+    // 🔒 Rutas que solo puede ver el rol Admin
+  const rutasSoloAdmin = ["/reportes"];
+  const accesoDenegado =
+    isLoggedIn &&
+    rol !== "Admin" &&
+    rutasSoloAdmin.some((ruta) => pathname.startsWith(ruta));
+
+  useEffect(() => {
+    if (!cargando && accesoDenegado) {
+      router.replace("/mapa");
+    }
+  }, [cargando, accesoDenegado, router]);
+
   async function handleLogout() {
     try {
       await fetch("/api/logout", {
@@ -113,16 +126,19 @@ export default function ClientLayout({ children }) {
             <Link href="/riesgos" className="block hover:bg-green-600 p-1 rounded font-bold">
               RIESGOS
             </Link>
-            <Link href="/reportes" className="block hover:bg-green-600 p-1 rounded font-bold">
-              REPORTES
-            </Link>
 
             {/* 🔹 Enlace solo visible si el usuario es Admin */}
+            {rol === "Admin" && (
+              <Link href="/reportes" className="block hover:bg-green-600 p-1 rounded font-bold">
+                REPORTES
+              </Link>
+            )}
             {rol === "Admin" && (
               <Link href="/usuarios" className="block hover:bg-green-600 p-1 rounded font-bold">
                 USUARIOS
               </Link>
             )}
+
           </nav>
           {/* 🔹 Botón de cerrar sesión arriba */}
           <button
@@ -136,7 +152,7 @@ export default function ClientLayout({ children }) {
       )}
 
       {/* Contenido principal */}
-      <main className="flex-1 bg-gray-100 p-6">{children}</main>
+      <main className="flex-1 bg-gray-100 p-6">{accesoDenegado ? null : children}</main>
     </div>
   );
 }
