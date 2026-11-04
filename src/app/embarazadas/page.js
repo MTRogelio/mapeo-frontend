@@ -104,18 +104,35 @@ const EmbarazadasPage = () => {
 
 
   // ======== GUARDAR CAMBIOS ========
-  const guardarCambiosEmbarazada = () => {
-    fetch(
-      `/api/embarazadas/${editandoEmbarazada.ID_Embarazada}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editandoEmbarazada),
+  const guardarCambiosEmbarazada = async () => {
+    try {
+      const res = await fetch(
+        `/api/embarazadas/${editandoEmbarazada.ID_Embarazada}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(editandoEmbarazada)
+        }
+      );
+
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error);
       }
-    ).then(() => {
+
+      alert("✅ Embarazada actualizada correctamente");
+
       setEditandoEmbarazada(null);
+
       cargarEmbarazadas();
-    });
+      cargarEmbarazadasConDireccion();
+
+    } catch (error) {
+      console.error("Error al actualizar:", error);
+      alert("⚠️ No se pudieron guardar los cambios: " + error.message);
+    }
   };
 
   const guardarCambiosDireccion = () => {
