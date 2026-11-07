@@ -164,21 +164,15 @@ export default function UsuariosPage() {
           <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>CorreoElectronico</th>
-            <th>DPI</th>
-            <th>Telefono</th>
             <th>Rol</th>
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody>
+          <tbody>
           {usuarios.map((u) => (
             <tr key={u.ID_Usuario}>
               <td data-label="ID">{u.ID_Usuario}</td>
               <td data-label="Nombre">{u.Nombre}</td>
-              <td data-label="Correo">{u.CorreoElectronico}</td>
-              <td data-label="DPI">{u.DPI}</td>
-              <td data-label="Teléfono">{u.TELEFONO}</td>
               <td data-label="Rol">{u.Rol}</td>
               <td data-label="Acciones">
                 <button onClick={() => setEditando(u)} className="btn-edit">Editar</button>
