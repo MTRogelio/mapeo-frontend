@@ -97,7 +97,7 @@ export default function RegistrarEmbarazada() {
         <input type="number" name="NumSemanas" placeholder="NumSemanas" className="input" required />
 
         <input name="Calle" placeholder="Calle" className="input" required />
-        <input name="Ciudad" placeholder="Ciudad" className="input" required />
+        <input name="Ciudad" placeholder="Ciudad/Aldea" className="input" required />
 
         {/* 🔹 ComboBox de Municipio */}
         <select name="Municipio" className="input" required>
