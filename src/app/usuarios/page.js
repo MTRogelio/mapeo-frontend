@@ -8,7 +8,7 @@ export default function UsuariosPage() {
   const [error, setError] = useState("");
   const [editando, setEditando] = useState(null);
 
-  const rolesDisponibles = ["Usuario", "Admin", "Supervisor"];
+  const rolesDisponibles = ["Usuario", "Admin"];
 
   const cargarUsuarios = () => {
     fetch("/api/usuarios")
