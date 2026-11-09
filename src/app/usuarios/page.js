@@ -101,8 +101,10 @@ export default function UsuariosPage() {
     }
   };
 
+  
   const guardarEdicion = async (e) => {
     e.preventDefault();
+
     const nombre = e.target.nombre.value;
     const correo = e.target.correo.value;
     const dpi = e.target.dpi.value;
@@ -120,9 +122,9 @@ export default function UsuariosPage() {
       body: JSON.stringify({
         Nombre: nombre,
         Contraseña: editando.Contraseña,
-        CorreoElectronico: correo,
-        DPI: dpi,
-        TELEFONO: telefono,
+        CorreoElectronico: correo || editando.CorreoElectronico,
+        DPI: dpi || editando.DPI,
+        TELEFONO: telefono || editando.TELEFONO,
         Salt: editando.Salt,
         Rol: rol,
       }),
@@ -136,6 +138,7 @@ export default function UsuariosPage() {
       alert("⚠ Error al editar");
     }
   };
+
 
   if (loading) return <p>Cargando...</p>;
   if (error) return <p className="text-error">⚠ {error}</p>;
@@ -190,11 +193,11 @@ export default function UsuariosPage() {
             <label className="label">Nombre:</label>
             <input name="nombre" defaultValue={editando.Nombre} className="modal-input" required />
             <label className="label">Correo:</label>
-            <input name="correo" defaultValue={editando.CorreoElectronico} className="modal-input" required />
+            <input name="correo" placeholder="Correo electrónico" className="modal-input" />
             <label className="label">DPI:</label>
-            <input name="dpi" defaultValue={editando.DPI} className="modal-input" required />
+            <input name="dpi" placeholder="DPI" className="modal-input" />
             <label className="label">Telefono:</label>
-            <input name="telefono" defaultValue={editando.TELEFONO} className="modal-input" required />
+            <input name="telefono" placeholder="Teléfono" className="modal-input" />
             <label className="label">Rol:</label>
             <select name="rol" defaultValue={editando.Rol} className="modal-input" required>
               <option value="">-- Seleccionar Rol --</option>
